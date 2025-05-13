@@ -62,7 +62,28 @@ export default function Modules() {
                     <div className="wd-title">Week 2</div>
                     <ul className="wd-lessons">
                         <li className="wd-lesson">
-                            <span className="wd-title">Pending Publication</span>
+                            <span className="wd-title">LEARNING OBJECTIVES</span>
+                            <ul className="wd-content">
+                                <li className="wd-content-item">Introduction to CSS</li>
+                                <li className="wd-content-item">Selectors by tag ID, classes, and document structure</li>
+                                <li className="wd-content-item">Styling color and background color</li>
+                                <li className="wd-content-item">Styling dimensions and positions</li>
+                                <li className="wd-content-item">The box model - styling margins, borders, and paddings</li>
+                            </ul>
+                        </li>
+                        <li className="wd-lesson">
+                            <span className="wd-title">READING</span>
+                            <ul className="wd-content">
+                                <li className="wd-content-item">Developing Full Stack MERN Web Applications - Chapter 2 - Styling Web Pages with CSS</li>
+                            </ul>
+                        </li>
+                        <li className="wd-lesson">
+                            <span className="wd-title">SLIDES</span>
+                            <ul className="wd-content">
+                                <li className="wd-content-item">MDN Learn CSS</li>
+                                <li className="wd-content-item">MDN CSS guidelines</li>
+                                <li className="wd-content-item">MDN The Box Model</li>
+                            </ul>
                         </li>
                     </ul>
                 </li>
