@@ -1,6 +1,9 @@
 export default function Lab1() {
     return (
         <div id="wd-lab1">
+            <h1>Ryan Webb</h1>
+            <h1>CS5610</h1>
+            <h1>202540_2 Summer 1 2025</h1>
             <h2>Lab 1</h2>
             <h3>HTML Examples</h3>
             <div id="wd-h-tag">
@@ -230,6 +233,8 @@ tag to tell browsers to render the gaps.
                     id="wd-all-good">
                 Hello World!
             </button>
+            <br /><br />
+            <input type="file" id="file_upload"/>
 
             <h5 id="wd-radio-buttons">Radio buttons</h5>
             <label>Favorite movie genre:</label><br />
@@ -244,6 +249,22 @@ tag to tell browsers to render the gaps.
             <label htmlFor="wd-radio-scifi">Science Fiction</label><br />
             <input type="radio" name="radio-genre" id="wd-radio-fantasy"/>
             <label htmlFor="wd-radio-fantasy">Fantasy</label>
+
+            <h5 id="wd-checkboxes">Checkboxes</h5>
+            <label>Favorite movie genre:</label><br/>
+
+            <input type="checkbox" name="check-genre" id="wd-chkbox-comedy"/>
+            <label htmlFor="wd-chkbox-comedy">Comedy</label><br/>
+
+            <input type="checkbox" name="check-genre" id="wd-chkbox-drama"/>
+            <label htmlFor="wd-chkbox-drama">Drama</label><br/>
+
+            <input type="checkbox" name="check-genre" id="wd-chkbox-scifi"/>
+            <label htmlFor="wd-chkbox-scifi">Science Fiction</label><br/>
+
+            <input type="checkbox" name="check-genre" id="wd-chkbox-fantasy"/>
+            <label htmlFor="wd-chkbox-fantasy">Fantasy</label>
+
             <h4 id="wd-dropdowns">Dropdowns</h4>
 
             <h5>Select one</h5>

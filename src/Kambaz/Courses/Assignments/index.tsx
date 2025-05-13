@@ -30,6 +30,12 @@ export default function Assignments() {
                     Multiple Modules | <b>Not available until</b> May 20 at 12:00 AM |<br />
                     <b>Due</b> May 27 at 11:59 PM | 100 pts
             </ul>
+            <h3 id="wd-assignments-title">
+                QUIZZES 10% of Total <button>+</button> </h3>
+            <h3 id="wd-assignments-title">
+                EXAMS 20% of Total <button>+</button> </h3>
+            <h3 id="wd-assignments-title">
+                PROJECT 30% of Total <button>+</button> </h3>
         </div>
     );
 }
