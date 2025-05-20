@@ -1,153 +1,177 @@
+import { 
+        Row,
+        Col, 
+        Form, 
+        FormSelect, 
+        InputGroup, 
+        Button,
+        Card 
+    } from 'react-bootstrap';
+import { IoCalendarOutline } from 'react-icons/io5';
+
 export default function AssignmentEditor() {
     return (
         <div id="wd-assignments-editor">
-            <label htmlFor="wd-name">Assignment Name</label><br /><br />
-            <input id="wd-name" defaultValue="A1 - ENV + HTML" /><br /><br />
-            <textarea id="wd-description"
-                defaultValue="The assignment is available online Submit a link to the landing page of your Web application running on Netlify. The landing page should include the following:
-                Your full name and section Links to each of the lab assignments Link to the Kambaz application Links to all relevant source code repositories
-                The Kambaz application should include a link to navigate back to the landing page.">
-            </textarea>
-            <br />
-            <table>
-                <tbody>
-                    <tr>
-                        <td align="right" valign="top">
-                            <label htmlFor="wd-points">Points</label>
-                        </td>
-                        <td>
-                            <input id="wd-points" defaultValue={100} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top">
-                            <label htmlFor="wd-group">Assignment Group</label>
-                        </td>
-                        <td>
-                            <select id="wd-group" defaultValue="ASSIGNMENTS">
+            <div id="wd-assignments-editor">
+                <div id="wd-assignment-name">
+                    <Form.Group className="mb-3" controlId="wd-assignment-name">
+                        <Form.Label>Assignment Name</Form.Label>
+                        <Form.Control type="text" defaultValue={"A1"} />
+                    </Form.Group>
+                </div>
+                <div id="wd-assignment-description">
+                    <Form.Group className="mb-3" controlId="wd-assignment-description">
+                        <Form.Control as="textarea" rows={11} 
+                        defaultValue={
+                            `The assignment is available online.
+
+Submit a link to the landing page of your Web application running on Netlify.
+
+The landing page should include the following:
+- Your full name and section
+- Links to each of the lab assignments
+- Link to the Kambaz application
+- Links to all relevant source code repositories
+
+The Kambaz application should include a link to navigate back to the landing page.`
+                        }/>
+                    </Form.Group>
+                </div>
+
+                <div id="wd-points">
+                    <Form.Group as={Row} className="mb-3" controlId="wd-points">
+                        <Form.Label column sm="2">
+                            Points
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Control as="textarea" defaultValue={100} rows={1} />
+                        </Col>
+                    </Form.Group>
+                </div>
+
+                <div id="wd-assignment-group">
+                    <Form.Group as={Row} className="mb-3" controlId="wd-assignment-group">
+                        <Form.Label column sm="2">
+                            Assignment Group
+                        </Form.Label>
+                        <Col sm="10">
+                            <FormSelect defaultValue="ASSIGNMENTS">
                                 <option value="ASSIGNMENTS">ASSIGNMENTS</option>
                                 <option value="QUIZZES">QUIZZES</option>
                                 <option value="EXAMS">EXAMS</option>
                                 <option value="PROJECTS">PROJECTS</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top">
-                            <label htmlFor="wd-display-grade-as">Display Grade as</label>
-                        </td>
-                        <td>
-                            <select id="wd-display-grade-as" defaultValue="Percentage">
+                            </FormSelect>
+                        </Col>
+                    </Form.Group>
+                </div>
+
+                <div id="wd-display-grade">
+                    <Form.Group as={Row} className="mb-3" controlId="wd-display-grade">
+                        <Form.Label column sm="2">
+                            Display Grade as
+                        </Form.Label>
+                        <Col sm="10">
+                            <FormSelect defaultValue="Percentage">
                                 <option value="Percentage">Percentage</option>
                                 <option value="Decimal">Decimal</option>
                                 <option value="Number">Number</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top">
-                            <label htmlFor="wd-submission-type">Submission Type</label>
-                        </td>
-                        <td>
-                            <select id="wd-submission-type" defaultValue="Online">
-                                <option value="Online">Online</option>
-                                <option value="Hand-In">Hand-In</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>Online Entry Options</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input type="checkbox" id="wd-text-entry" />
-                            <label htmlFor="wd-text-entry">Text Entry</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input type="checkbox" id="wd-website-url" />
-                            <label htmlFor="wd-website-url">Website URL</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input type="checkbox" id="wd-media-recordings" />
-                            <label htmlFor="wd-media-recordings">Media Recordings</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input type="checkbox" id="wd-student-annotation" />
-                            <label htmlFor="wd-student-annotation">Student Annotation</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input type="checkbox" id="wd-file-upload" />
-                            <label htmlFor="wd-file-upload">File Upload</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top">Assign</td>
-                        <td align="left" valign="top">
-                            <label htmlFor="wd-assign-to">Assign To</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input id="wd-assign-to" defaultValue="Everyone" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td align="left" valign="top">
-                            <label htmlFor="wd-due-date">Due</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td align="left" valign="top">
-                            <input type="date"
-                                defaultValue="2024-05-13"
-                                id="wd-due-date"/><br/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td align="left" valign="top">
-                            <label htmlFor="wd-available-from">Available From</label>
-                        </td>
-                        <td align="left" valign="top">
-                            <label htmlFor="wd-available-until">Until</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input type="date"
-                                defaultValue="2024-05-06"
-                                id="wd-available-from"/><br/>
-                        </td>                    
-                        <td>
-                            <input type="date"
-                                defaultValue="2024-05-20"
-                                id="wd-available-until"/><br/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </FormSelect>
+                        </Col>
+                    </Form.Group>
+                </div>
+                
+                <div id="wd-submission-type">
+                    <Form.Group as={Row} className="mb-3" controlId="wd-submission-type">
+                        <Form.Label column sm="2">
+                            Submission Type
+                        </Form.Label>
+                        <Col sm="10">
+                            <Card className="mb-4">
+                                <Card.Body>
+                                    <FormSelect defaultValue="Online">
+                                        <option value="Online">Online</option>
+                                        <option value="Hand-In">Hand-In</option>
+                                    </FormSelect>
+                                    <br />
+                                    <Form.Label><b>Online Entry Options</b></Form.Label>
+                                    <Form.Check type="checkbox" id="wd-text-entry" label="Text Entry" />
+                                    <Form.Check type="checkbox" id="wd-website-url" label="Website URL" />
+                                    <Form.Check type="checkbox" id="wd-media-recordings" label="Media Recordings" />
+                                    <Form.Check type="checkbox" id="wd-student-annotation" label="Student Annotation" />
+                                    <Form.Check type="checkbox" id="wd-file-upload" label="File Upload" />
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Form.Group>
+                </div>
+
+                <div id="wd-submission-type">
+                    <Form.Group as={Row} className="mb-3" controlId="wd-submission-type">
+                        <Form.Label column sm="2">
+                            Submission Type
+                        </Form.Label>
+                        <Col sm="10">
+                            <Card className="mb-4">
+                                <Card.Body>
+                                    <FormSelect defaultValue="Online">
+                                        <option value="Online">Online</option>
+                                        <option value="Hand-In">Hand-In</option>
+                                    </FormSelect>
+                                    <br />
+                                    <Form.Label><b>Online Entry Options</b></Form.Label>
+                                    <Form.Check type="checkbox" id="wd-text-entry" label="Text Entry" />
+                                    <Form.Check type="checkbox" id="wd-website-url" label="Website URL" />
+                                    <Form.Check type="checkbox" id="wd-media-recordings" label="Media Recordings" />
+                                    <Form.Check type="checkbox" id="wd-student-annotation" label="Student Annotation" />
+                                    <Form.Check type="checkbox" id="wd-file-upload" label="File Upload" />
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Form.Group>
+                </div>
+
+                <div id="wd-assign">
+                    <Form.Group as={Row} className="mb-3" controlId="wd-assign">
+                        <Form.Label column sm="2">
+                            Assign
+                        </Form.Label>
+                        <Col sm="10">
+                            <Card className="mb-4">
+                                <Card.Body>
+                                    <Form.Label><b>Assign to</b></Form.Label>
+                                    <Form.Control type="text" defaultValue="Everyone" />
+                                    <br />
+                                    <Form.Label><b>Due</b></Form.Label>
+                                    <InputGroup className="mb-3">
+                                        <Form.Control type="date" defaultValue="2024-05-13" />
+                                        <InputGroup.Text><IoCalendarOutline /></InputGroup.Text>
+                                    </InputGroup>
+                                    <Form.Group as={Row} className="mb-3" controlId="wd-assign-availability">
+                                        <Col sm="6">
+                                            <Form.Label><b>Available From</b></Form.Label>
+                                            <InputGroup className="mb-3">
+                                                <Form.Control type="date" defaultValue="2024-05-06" />
+                                                <InputGroup.Text><IoCalendarOutline /></InputGroup.Text>
+                                            </InputGroup>
+                                        </Col>
+                                        <Col sm="6">
+                                            <Form.Label><b>Until</b></Form.Label>
+                                            <InputGroup className="mb-3">                                    
+                                                <Form.Control type="date" defaultValue="2024-05-20" />
+                                                <InputGroup.Text><IoCalendarOutline /></InputGroup.Text>
+                                            </InputGroup>
+                                        </Col>
+                                    </Form.Group>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Form.Group>
+                </div>
+            </div>
             <hr />
-            <div style={{ textAlign: 'right' }}>
-                <button id="wd-cancel">Cancel</button>
-                <button id="wd-save" style={{ marginLeft: '8px' }}>Save</button>
+            <div className="float-end">
+                <Button variant="secondary" id="wd-cancel">Cancel</Button>
+                <Button variant="danger" id="wd-save" className="ms-2">Save</Button>
             </div>
         </div>
     );
