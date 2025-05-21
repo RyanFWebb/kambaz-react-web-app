@@ -60,7 +60,7 @@ The Kambaz application should include a link to navigate back to the landing pag
                             Points
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control as="textarea" defaultValue={100} rows={1} />
+                            <Form.Control type="number" defaultValue={100} />
                         </Col>
                     </Form.Group>
                 </div>
