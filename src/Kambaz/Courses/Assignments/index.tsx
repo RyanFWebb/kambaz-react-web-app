@@ -1,8 +1,8 @@
-import { ListGroup, Button, Row, Col, Form } from "react-bootstrap";
+import { ListGroup, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
 import GreenCheckmark from "./GreenCheckmark";
 import { IoEllipsisVertical } from "react-icons/io5";
-import { FaPlus, FaEdit } from "react-icons/fa";
+import { FaPlus, FaEdit, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function Assignments() {
@@ -12,11 +12,16 @@ export default function Assignments() {
                 <div className="assignments-header mb-3">
                     <Row className="align-items-center">
                         <Col>
-                            <Form.Control 
-                                type="text" 
-                                placeholder="Search..." 
-                                className="search-input"
-                            />
+                            <InputGroup className="mb--3">
+                                <InputGroup.Text id="magnifying-glass">
+                                    <FaSearch />
+                                </InputGroup.Text>
+                                <Form.Control 
+                                    type="text" 
+                                    placeholder="Search..." 
+                                    className="search-input"
+                                />
+                            </InputGroup>
                         </Col>
                         <Col className="d-flex justify-content-end">
                             <Button variant="secondary" className="me-2 header-button">
@@ -39,7 +44,7 @@ export default function Assignments() {
                                 <IoEllipsisVertical className="fs-5"/>
                             </div>
                         </div>
-                        <ListGroup className="assignments-list rounded-0">
+                        <ListGroup className="assignments-list rounded-0 left-green-border">
 
                             <ListGroup.Item className="assignment-item p-3">
                                 <div className="d-flex w-100 justify-content-between align-items-center">

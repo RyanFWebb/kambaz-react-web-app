@@ -20,13 +20,7 @@ import { LiaBookSolid, LiaCogSolid } from "react-icons/lia";
 import { FaInbox, FaRegCircleUser } from "react-icons/fa6";
 import { ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 export default function KambazNavigation() {
-    const [activeItem, setActiveItem] = useState("Account");
-    const isActive = (itemName: string): boolean => activeItem === itemName;
-    const handleItemClick = (itemName: string): void => {
-        setActiveItem(itemName);
-    };
     return (
         <ListGroup id="wd-kambaz-navigation" style={{ width: 110 }}
             className="rounded-0 position-fixed 
@@ -40,54 +34,48 @@ export default function KambazNavigation() {
             <ListGroup.Item 
                 to="/Kambaz/Account" 
                 as={Link}
-                onClick={() => handleItemClick("Account")}
-                className={`text-center border-0 ${isActive("Account") ? "bg-white text-danger" : "bg-black text-white"}`}>
-                <FaRegCircleUser className={`fs-1 ${isActive("Account") ? "text-danger" : "text-white"}`} /><br />
+                className="text-center border-0 bg-black text-white">
+                <FaRegCircleUser className="fs-1  bg-black text-white" /><br />
                 Account 
             </ListGroup.Item>
             
             <ListGroup.Item 
                 to="/Kambaz/Dashboard" 
                 as={Link}
-                onClick={() => handleItemClick("Dashboard")}
-                className={`text-center border-0 ${isActive("Dashboard") ? "bg-white text-danger" : "bg-black text-white"}`}>
-                <AiOutlineDashboard className={`fs-1 text-danger`} /><br />
+                className="text-center border-0 bg-white text-danger">
+                <AiOutlineDashboard className="fs-1 bg-white text-danger" /><br />
                 Dashboard 
             </ListGroup.Item>
             
             <ListGroup.Item 
                 to="/Kambaz/Dashboard" 
                 as={Link}
-                onClick={() => handleItemClick("Courses")}
-                className={`text-center border-0 ${isActive("Courses") ? "bg-white text-danger" : "bg-black text-white"}`}>
-                <LiaBookSolid className={`fs-1 text-danger`} /><br />
+                className="text-center border-0 bg-black text-white">
+                <LiaBookSolid className="fs-1 bg-black text-danger" /><br />
                 Courses 
             </ListGroup.Item>
             
             <ListGroup.Item 
                 to="/Kambaz/Calendar" 
                 as={Link}
-                onClick={() => handleItemClick("Calendar")}
-                className={`text-center border-0 ${isActive("Calendar") ? "bg-white text-danger" : "bg-black text-white"}`}>
-                <IoCalendarOutline className={`fs-1 text-danger`} /><br />
+                className="text-center border-0 bg-black text-white">
+                <IoCalendarOutline className="fs-1 bg-black text-danger" /><br />
                 Calendar 
             </ListGroup.Item>
             
             <ListGroup.Item 
                 to="/Kambaz/Inbox" 
                 as={Link}
-                onClick={() => handleItemClick("Inbox")}
-                className={`text-center border-0 ${isActive("Inbox") ? "bg-white text-danger" : "bg-black text-white"}`}>
-                <FaInbox className={`fs-1 text-danger`} /><br />
+                className="text-center border-0 bg-black text-white">
+                <FaInbox className="fs-1 bg-black text-danger" /><br />
                 Inbox 
             </ListGroup.Item>
             
             <ListGroup.Item 
                 to="/Labs" 
                 as={Link}
-                onClick={() => handleItemClick("Labs")}
-                className={`text-center border-0 ${isActive("Labs") ? "bg-white text-danger" : "bg-black text-white"}`}>
-                <LiaCogSolid className={`fs-1 text-danger`} /><br />
+                className="text-center border-0 bg-black text-white">
+                <LiaCogSolid className="fs-1 bg-black text-danger" /><br />
                 Labs 
             </ListGroup.Item>
         </ListGroup>
