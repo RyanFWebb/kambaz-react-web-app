@@ -4,4 +4,4 @@ export default function Lab5() {
             <h2>Lab 5</h2>
         </div>
     );
-};
+}

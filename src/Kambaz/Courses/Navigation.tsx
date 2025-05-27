@@ -1,170 +1,54 @@
-// import { NavLink } from "react-router-dom";
-// export default function CourseNavigation() {
-//     return (
-//         <div id="wd-courses-navigation" className="wd list-group fs-5 rounded-0">
-//             <NavLink to="/Kambaz/Courses/1234/Home" id="wd-course-home-link"
-//                 className={({ isActive }) =>
-//           `list-group-item border-0 ${isActive ? "active-link" : "inactive-link"}`
-//         }>Home</NavLink>
-//             <NavLink to="/Kambaz/Courses/1234/Modules" id="wd-course-modules-link"
-//                 className={({ isActive }) =>
-//           `list-group-item border-0 ${isActive ? "active-link" : "inactive-link"}`
-//         }>Modules</NavLink>
-//             <NavLink to="/Kambaz/Courses/1234/Piazza" id="wd-course-piazza-link"
-//                 className={({ isActive }) =>
-//           `list-group-item border-0 ${isActive ? "active-link" : "inactive-link"}`
-//         }>Piazza</NavLink>
-//             <NavLink to="/Kambaz/Courses/1234/Zoom" id="wd-course-zoom-link"
-//                 className={({ isActive }) =>
-//           `list-group-item border-0 ${isActive ? "active-link" : "inactive-link"}`
-//         }>Zoom</NavLink>
-//             <NavLink to="/Kambaz/Courses/1234/Assignments" id="wd-course-quizzes-link"
-//                 className={({ isActive }) =>
-//           `list-group-item border-0 ${isActive ? "active-link" : "inactive-link"}`
-//         }>Assignments</NavLink>
-//             <NavLink to="/Kambaz/Courses/1234/Quizzes" id="wd-course-assignments-link"
-//                 className={({ isActive }) =>
-//           `list-group-item border-0 ${isActive ? "active-link" : "inactive-link"}`
-//         }>Quizzes</NavLink>
-//             <NavLink to="/Kambaz/Courses/1234/Grades" id="wd-course-grades-link"
-//                 className={({ isActive }) =>
-//           `list-group-item border-0 ${isActive ? "active-link" : "inactive-link"}`
-//         }>Grades</NavLink>
-//             <NavLink to="/Kambaz/Courses/1234/People" id="wd-course-people-link"
-//                 className={({ isActive }) =>
-//           `list-group-item border-0 ${isActive ? "active-link" : "inactive-link"}`
-//         }>People</NavLink>
-//         </div>
-//     );
-// }
-
-// import { NavLink } from "react-router-dom";
-
-// export default function CourseNavigation() {
-//   const links = [
-//     { path: "/Kambaz/Courses/1234/Home", label: "Home", id: "wd-course-home-link" },
-//     { path: "/Kambaz/Courses/1234/Modules", label: "Modules", id: "wd-course-modules-link" },
-//     { path: "/Kambaz/Courses/1234/Piazza", label: "Piazza", id: "wd-course-piazza-link" },
-//     { path: "/Kambaz/Courses/1234/Zoom", label: "Zoom", id: "wd-course-zoom-link" },
-//     { path: "/Kambaz/Courses/1234/Assignments", label: "Assignments", id: "wd-course-assignments-link" },
-//     { path: "/Kambaz/Courses/1234/Quizzes", label: "Quizzes", id: "wd-course-quizzes-link" },
-//     { path: "/Kambaz/Courses/1234/Grades", label: "Grades", id: "wd-course-grades-link" },
-//     { path: "/Kambaz/Courses/1234/People", label: "People", id: "wd-course-people-link" },
-//   ];
-
-//   return (
-//     <div id="wd-courses-navigation" className="list-group fs-5 rounded-0">
-//       {links.map(({ path, label, id }) => (
-//         <NavLink
-//           key={path}
-//           to={path}
-//           id={id}
-//           className={({ isActive }) =>
-//             `list-group-item border-0 ${
-//               isActive
-//                 ? "text-black border-start border-4 border-black fw-bold"
-//                 : "text-danger"
-//             }`
-//           }
-//         >
-//           {label}
-//         </NavLink>
-//       ))}
-//     </div>
-//   );
-// }
-
-import { NavLink } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { ListGroup } from "react-bootstrap";
+import * as db from "../Database";
 
 export default function CourseNavigation() {
+    const { cid } = useParams();
+    const { pathname } = useLocation();
+    const course = db.courses.find((course) => course._id === cid);
+    if (!course) {
+        return <div>Course not found</div>;
+    }
+    const links = [
+        { label: "Home", path: `/Kambaz/Courses/${course._id}/Home` },
+        { label: "Modules", path: `/Kambaz/Courses/${course._id}/Modules` },
+        { label: "Piazza", path: `/Kambaz/Courses/${course._id}/Piazza` },
+        { label: "Zoom", path: `/Kambaz/Courses/${course._id}/Zoom` },
+        { label: "Assignments", path: `/Kambaz/Courses/${course._id}/Assignments` },
+        { label: "Quizzes", path: `/Kambaz/Courses/${course._id}/Quizzes` },
+        { label: "Grades", path: `/Kambaz/Courses/${course._id}/Grades` },
+        { label: "People", path: `/Kambaz/Courses/${course._id}/People` }
+    ];
     return (
         <div id="wd-courses-navigation" className="list-group fs-5 rounded-0">
-            <NavLink
-                to="/Kambaz/Courses/1234/Home"
-                id="wd-course-home-link"
-                className={({ isActive }) =>
-                `list-group-item border-0 ${
-                    isActive
-                    ? "text-black border-start border-1 border-black"
-                    : "text-danger"
-                }`}>Home
-            </NavLink>
-
-            <NavLink
-                to="/Kambaz/Courses/1234/Modules"
-                id="wd-course-modules-link"
-                className={({ isActive }) =>
-                `list-group-item border-0 ${isActive
-                    ? "text-black border-start border-1 border-black"
-                    : "text-danger"
-                }`}>Modules
-            </NavLink>
-
-            <NavLink
-                to="/Kambaz/Courses/1234/Piazza"
-                id="wd-course-piazza-link"
-                className={({ isActive }) =>
-                `list-group-item border-0 ${
-                    isActive
-                    ? "text-black border-start border-1 border-black"
-                    : "text-danger"
-                }`}>Piazza
-            </NavLink>
-
-            <NavLink
-                to="/Kambaz/Courses/1234/Zoom"
-                id="wd-course-zoom-link"
-                className={({ isActive }) =>
-                `list-group-item border-0 ${
-                    isActive
-                    ? "text-black border-start border-1 border-black"
-                    : "text-danger"
-                }`}>Zoom
-            </NavLink>
-
-            <NavLink
-                to="/Kambaz/Courses/1234/Assignments"
-                id="wd-course-assignments-link"
-                className={({ isActive }) =>
-                `list-group-item border-0 ${
-                    isActive
-                    ? "text-black border-start border-1 border-black"
-                    : "text-danger"
-                }`}>Assignments
-            </NavLink>
-
-            <NavLink
-                to="/Kambaz/Courses/1234/Quizzes"
-                id="wd-course-quizzes-link"
-                className={({ isActive }) =>
-                `list-group-item border-0 ${
-                    isActive
-                    ? "text-black border-start border-1 border-black"
-                    : "text-danger"
-                }`}>Quizzes
-            </NavLink>
-
-            <NavLink
-                to="/Kambaz/Courses/1234/Grades"
-                id="wd-course-grades-link"
-                className={({ isActive }) =>
-                `list-group-item border-0 ${
-                    isActive
-                    ? "text-black border-start border-1 border-black"
-                    : "text-danger"
-                }`}>Grades
-            </NavLink>
-
-      <NavLink
-        to="/Kambaz/Courses/1234/People"
-        id="wd-course-people-link"
-        className={({ isActive }) =>
-          `list-group-item border-0 ${
-            isActive
-              ? "text-black border-start border-1 border-black"
-              : "text-danger"
-          }`}>People
-      </NavLink>
-    </div>
-  );
+            <ListGroup id="wd-courses-navigation" style={{width: 120}}
+                className="list-group fs-5 rounded-0">
+                {links.map((link) => (
+                    <ListGroup.Item key={link.path} as={Link} to={link.path} className={`bg-black text-left border-0
+                        ${pathname.includes(link.label) 
+                        ? "text-black bg-white border-start border-3 border-black" 
+                        : "text-danger bg-white"}`}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            paddingLeft: '1px',
+                            paddingRight: '15px',
+                            marginBottom: '4px',
+                        }}>
+                        <br />
+                        <div
+                            style={{
+                                position: 'absolute',
+                                left: '0',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                height: '100%',
+                            }}
+                        />
+                        {link.label}
+                    </ListGroup.Item>
+                ))}
+            </ListGroup>
+        </div>
+    );
 }
