@@ -1,13 +1,51 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ListGroup } from "react-bootstrap";
+
 export default function CourseNavigation() {
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
+    const { pathname } = useLocation();
+
     return (
         <div id="wd-account-navigation" className="wd list-group fs-5 rounded-0">
-            <Link to="/Kambaz/Account/Signin" id="wd-account-signin-link"
-                className="list-group-item active border border-0">Signin</Link>
-            <Link to="/Kambaz/Account/Signup" id="wd-account-signup-link"
-                className="list-group-item text-danger border border-0">Signup</Link>
-            <Link to="/Kambaz/Account/Profile" id="wd-account-profile-link"
-                className="list-group-item text-danger border border-0">Profile</Link>
+            <ListGroup id="wd-courses-navigation" style={{width: 120}}
+                className="list-group fs-5 rounded-0">
+                {links.map((label) => {
+                    const path = `/Kambaz/Account/${label}`;
+                    const isActive = pathname === path;
+                    return (
+                        <ListGroup.Item
+                            key={path}
+                            as={Link}
+                            to={path}
+                            className={`bg-black text-left border-0
+                                ${isActive
+                                    ? "text-black bg-white border-start border-3 border-black"
+                                    : "text-danger bg-white"}`}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                paddingLeft: '1px',
+                                paddingRight: '15px',
+                                marginBottom: '4px',
+                            }}
+                        >
+                            <br />
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    left: '0',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    height: '100%',
+                                }}
+                            />
+                            {label}
+                        </ListGroup.Item>
+                    );
+                })}
+            </ListGroup>
         </div>
     );
 }

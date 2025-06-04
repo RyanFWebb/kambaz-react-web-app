@@ -7,7 +7,7 @@ export default function CourseNavigation() {
     const { pathname } = useLocation();
     const course = db.courses.find((course) => course._id === cid);
     if (!course) {
-        return <div>Course not found</div>;
+        return null;
     }
     const links = [
         { label: "Home", path: `/Kambaz/Courses/${course._id}/Home` },
