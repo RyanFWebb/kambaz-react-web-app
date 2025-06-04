@@ -10,10 +10,14 @@ import Zoom from "./Zoom";
 import Quizzes from "./Quizzes";
 import { Routes, Route, Navigate, useParams, useLocation } from "react-router-dom";
 import { FaAlignJustify } from 'react-icons/fa';
-export default function Courses({ courses }: { courses: any[] }) {
+import { useSelector } from "react-redux";
+
+export default function Courses() {
     const { cid } = useParams();
-    const course = courses.find((course) => course._id === cid);
+    const { courses } = useSelector((state: any) => state.coursesReducer);
+    const course = courses.find((course: any) => course._id === cid);
     const { pathname } = useLocation();
+    
     return (
         <div id="wd-courses">
             <h2 className="text-danger">
