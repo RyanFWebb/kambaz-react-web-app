@@ -119,7 +119,7 @@ export default function Dashboard() {
                     {/* Show Enroll/Unenroll button for students */}
                     {!isFaculty && (
                       <Button 
-                        className={`float-end ${isUserEnrolledInCourse(course._id) ? 'btn-danger' : 'btn-success'}`}
+                        className={`float-end mb-3 ${isUserEnrolledInCourse(course._id) ? 'btn-danger' : 'btn-success'}`}
                         onClick={(event) => {
                           event.preventDefault();
                           handleEnrollment(course._id);
