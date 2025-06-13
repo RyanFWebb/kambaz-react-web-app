@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Row, Col, Card, Button, FormControl } from "react-bootstrap";
 import { Link } from "react-router-dom";
 // import { v4 as uuidv4 } from "uuid";
 import * as accountClient from "../Account/client";
 import * as courseClient from "../Courses/client";
-import { enrollUserInCourse, unenrollUserFromCourse } from "../Enrollments/reducer";
+// import { enrollUserInCourse, unenrollUserFromCourse } from "../Enrollments/reducer";
+import * as enrollmentClient from "../Enrollments/client";
 
 export default function Dashboard() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [courses, setCourses] = useState<any[]>([]);
   const [course, setCourse] = useState<any>({
@@ -91,11 +92,21 @@ export default function Dashboard() {
     setCourses(courses.filter((c) => c._id !== courseId));
   };
 
-  const handleEnrollment = (courseId: string, isEnrolled: boolean) => {
-    if (isEnrolled) {
-      dispatch(unenrollUserFromCourse({ userId: currentUser._id, courseId }));
-    } else {
-      dispatch(enrollUserInCourse({ userId: currentUser._id, courseId }));
+  const handleEnrollment = async (courseId: string, isEnrolled: boolean) => {
+    try {
+      if (isEnrolled) {
+        await enrollmentClient.unenrollUserFromCourse(currentUser._id, courseId);
+      } else {
+        await enrollmentClient.enrollUserInCourse(currentUser._id, courseId);
+      }
+
+      const updatedCourses = showAllCourses
+        ? await courseClient.fetchAllCourses()
+        : await accountClient.findMyCourses();
+
+      setCourses(updatedCourses);
+    } catch (err) {
+      console.error("Enrollment action failed:", err);
     }
   };
 
@@ -159,7 +170,7 @@ export default function Dashboard() {
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
           {courses.map((course: any) => {
-            const isEnrolled = course.enrolled === true; // optional: set on server
+            const isEnrolled = course.enrolled === true;
             return (
               <Col
                 key={course._id}
@@ -195,10 +206,20 @@ export default function Dashboard() {
 
                       {/* Enroll/Unenroll for students */}
                       {!isFaculty && (
+                        // <Button
+                        //   className={`float-end mb-3 ${
+                        //     isEnrolled ? "btn-danger" : "btn-success"
+                        //   }`}
+                        //   onClick={(event) => {
+                        //     event.preventDefault();
+                        //     handleEnrollment(course._id, isEnrolled);
+                        //   }}
+                        // >
+                        //   {isEnrolled ? "Unenroll" : "Enroll"}
+                        // </Button>
                         <Button
-                          className={`float-end mb-3 ${
-                            isEnrolled ? "btn-danger" : "btn-success"
-                          }`}
+                          variant={isEnrolled ? "danger" : "success"}
+                          className="float-end mb-3"
                           onClick={(event) => {
                             event.preventDefault();
                             handleEnrollment(course._id, isEnrolled);
