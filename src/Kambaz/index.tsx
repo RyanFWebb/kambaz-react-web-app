@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 // import { v4 as uuidv4 } from "uuid";
 
+
 export default function Kambaz() {
     const [courses, setCourses] = useState<any[]>([]);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -41,6 +42,8 @@ export default function Kambaz() {
         }
     };
 
+    
+
     useEffect(() => {
         fetchCourses();
     }, [currentUser]);
@@ -67,7 +70,6 @@ export default function Kambaz() {
 
     var unused = [ updateCourse, addNewCourse, deleteCourse]
     console.log(unused)
-
 
     return (
         <Session>
