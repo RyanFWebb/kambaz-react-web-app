@@ -18,7 +18,7 @@ export default function Modules() {
     const dispatch = useDispatch();
     const saveModule = async (module: any) => {
         await modulesClient.updateModule(module);
-        dispatch(updateModule({ ...updateModule, editing: false}));
+        dispatch(updateModule({ ...module, editing: false}));
     };
     const removeModule = async (moduleId: string) => {
         await modulesClient.deleteModule(moduleId);
@@ -57,7 +57,8 @@ export default function Modules() {
                                 }
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
-                                        saveModule({ ...module, editing: false});
+                                        e.preventDefault();
+                                        saveModule({ ...module, editing: false });
                                     }
                                 }}
                                 />
