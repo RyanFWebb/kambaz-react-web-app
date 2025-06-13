@@ -2,49 +2,44 @@ import { Link } from "react-router-dom";
 import { Row, Col, Card, Button, FormControl } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import { addCourse, deleteCourse, updateCourse } from "../Courses/courseReducer";
+// import { addCourse, deleteCourse, updateCourse } from "../Courses/courseReducer";
 import { enrollUserInCourse, unenrollUserFromCourse } from "../Enrollments/reducer";
+import { v4 as uuidv4 } from "uuid";
+import * as db from "../Database";
+import * as courseClient from "../Courses/client";
 
 export default function Dashboard() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { courses } = useSelector((state: any) => state.coursesReducer);
+  // const { courses } = useSelector((state: any) => state.coursesReducer);
   const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
   const dispatch = useDispatch();
   
+  const [courses, setCourses] = useState<any[]>(db.courses);
   const [course, setCourse] = useState<any>({
-    _id: "1234", 
-    name: "New Course", 
-    number: "New Number", 
-    startDate: "2023-09-10", 
-    endDate: "2023-12-15", 
-    description: "New Description", 
-    image: "/images/reactjs.jpg"
+    _id: "0", name: "New Course",
+    number: "New Number", startDate: "2023-09-10", 
+    endDate: "2023-12-15", image: "/images/reactjs.jpg", 
+    description: "New Description"
   });
 
   const [showAllCourses, setShowAllCourses] = useState<boolean>(false);
 
   const isFaculty = currentUser.role === "FACULTY";
-
   const addNewCourse = () => {
-    dispatch(addCourse(course));
-    // Reset form after adding
-    setCourse({
-      _id: "1234", 
-      name: "New Course", 
-      number: "New Number", 
-      startDate: "2023-09-10", 
-      endDate: "2023-12-15", 
-      description: "New Description", 
-      image: "/images/reactjs.jpg"
-    });
+    const newCourse = { ...course, _id: uuidv4() };
+    setCourses([...courses, newCourse ]);
   };
 
-  const handleDeleteCourse = (courseId: any) => {
-    dispatch(deleteCourse(courseId));
-  };
-
-  const handleUpdateCourse = () => {
-    dispatch(updateCourse(course));
+  const updateCourse = () => {
+    setCourses(
+      courses.map((c) => {
+        if (c._id === course._id) {
+          return course;
+        } else {
+          return c;
+        }
+      })
+    );
   };
 
   const isUserEnrolledInCourse = (courseId: string) => {
@@ -62,9 +57,14 @@ export default function Dashboard() {
     }
   };
 
-  const coursesToDisplay = showAllCourses 
-    ? courses 
-    : courses.filter((course: any) => isUserEnrolledInCourse(course._id));
+  // const coursesToDisplay = showAllCourses 
+  //   ? courses 
+  //   : courses.filter((course: any) => isUserEnrolledInCourse(course._id));
+
+  const deleteCourse = async (courseId: string) => {
+    const status = await courseClient.deleteCourse(courseId);
+    console.log(status);
+    setCourses(courses.filter((course) => course._id !== courseId))};
 
   return (
     <div id="wd-dashboard">
@@ -85,8 +85,9 @@ export default function Dashboard() {
                 id="wd-add-new-course-click"
                 onClick={addNewCourse} > Add </button>
               <button className="btn btn-warning float-end me-2"
-                onClick={handleUpdateCourse} id="wd-update-course-click">
-                Update</button>
+                onClick={updateCourse} id="wd-update-course-click">
+                Update
+              </button>
             </h5><br />
             <FormControl value={course.name} className="mb-2" 
               onChange={(e) => setCourse({ ...course, name: e.target.value }) } />
@@ -95,11 +96,15 @@ export default function Dashboard() {
           </>
         )}
       <h2 id="wd-dashboard-published">
-        {showAllCourses ? `All Courses (${coursesToDisplay.length})` : `Published Courses (${coursesToDisplay.length})`}
-      </h2> <hr />
+        {showAllCourses
+          ? `All Courses (${courses.length})`
+          : `Published Courses (${courses.filter((c: any) => isUserEnrolledInCourse(c._id)).length})`}
+      </h2><hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-          {coursesToDisplay.map((course: any) => (
+          {courses
+          .filter((course: any) => showAllCourses || isUserEnrolledInCourse(course._id))
+          .map((course: any) => (
             <Col key={course._id} className="wd-dashboard-course" style={{ width: "300px" }}>
               <Card>
                 <Link to={`/Kambaz/Courses/${course._id}/Home`}
@@ -133,9 +138,9 @@ export default function Dashboard() {
                     {isFaculty && (
                       <>
                         <Button onClick={(event) => {
-                            event.preventDefault();
-                            handleDeleteCourse(course._id);
-                          }} className="btn btn-danger float-end"
+                          event.preventDefault();
+                          deleteCourse(course._id);
+                        }} className="btn btn-danger float-end"
                           id="wd-delete-course-click">
                           Delete
                         </Button>
