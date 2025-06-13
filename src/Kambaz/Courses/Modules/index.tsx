@@ -1,5 +1,5 @@
 // import { setModules, addModule, editModule, updateModule, deleteModule } from "./reducer";
-import { addModule, editModule, updateModule, deleteModule } from "./reducer";
+import { setModules, addModule, editModule, updateModule, deleteModule } from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
 import ModulesControls from "./ModulesControls";
 import LessonControlButtons from "./LessonControlButtons";
@@ -18,7 +18,7 @@ export default function Modules() {
     const dispatch = useDispatch();
     const saveModule = async (module: any) => {
         await modulesClient.updateModule(module);
-        dispatch(updateModule(module));
+        dispatch(updateModule({ ...updateModule, editing: false}));
     };
     const removeModule = async (moduleId: string) => {
         await modulesClient.deleteModule(moduleId);
@@ -32,7 +32,7 @@ export default function Modules() {
     };
     const fetchModules = async () => {
         const modules = await coursesClient.findModulesForCourse(cid as string);
-        dispatch(addModule(modules));
+        dispatch(setModules(modules));
     };
     useEffect(() => {
         fetchModules();
@@ -49,6 +49,7 @@ export default function Modules() {
                         {!module.editing && module.name}
                         { module.editing && (
                             <FormControl className="w-50 d-inline-block"
+                                value={module.name}
                                 onChange={(e) => 
                                     dispatch(
                                         updateModule({ ...module, name: e.target.value })
@@ -59,14 +60,11 @@ export default function Modules() {
                                         saveModule({ ...module, editing: false});
                                     }
                                 }}
-                                defaultValue={module.name}/>
+                                />
                         )}
-                        <ModuleControlButtons
-                            moduleId={module._id}
+                        <ModuleControlButtons moduleId={module._id}
                             deleteModule={(moduleId) => removeModule(moduleId)}
-                            editModule={(moduleId) => {
-                                dispatch(editModule(moduleId));
-                            }}/>
+                            editModule={(moduleId) => dispatch(editModule(moduleId))} />
                     </div>
                     {module.lessons && (
                     <ListGroup className="wd-lessons rounded-0">
