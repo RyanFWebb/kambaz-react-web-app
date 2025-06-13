@@ -1,4 +1,5 @@
-import { setModules, addModule, editModule, updateModule, deleteModule } from "./reducer";
+// import { setModules, addModule, editModule, updateModule, deleteModule } from "./reducer";
+import { addModule, editModule, updateModule, deleteModule } from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
 import ModulesControls from "./ModulesControls";
 import LessonControlButtons from "./LessonControlButtons";
@@ -31,7 +32,7 @@ export default function Modules() {
     };
     const fetchModules = async () => {
         const modules = await coursesClient.findModulesForCourse(cid as string);
-        dispatch(setModules(modules));
+        dispatch(addModule(modules));
     };
     useEffect(() => {
         fetchModules();
