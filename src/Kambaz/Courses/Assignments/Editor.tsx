@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
 import type { Assignment } from "./reducer";
 import { useState, useEffect } from "react";
+import * as assignmentClient from "./client";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
@@ -24,7 +25,6 @@ export default function AssignmentEditor() {
   
   const isNewAssignment = aid === "new" || !existingAssignment;
 
-  // Form state
   const [formData, setFormData] = useState<Partial<Assignment>>({
     title: "",
     description: "",
@@ -80,7 +80,34 @@ export default function AssignmentEditor() {
     }));
   };
 
-  const handleSave = () => {
+  // const handleSave = () => {
+  //   if (!formData.title?.trim()) {
+  //     alert("Assignment name is required");
+  //     return;
+  //   }
+
+  //   const assignmentData: Assignment = {
+  //     _id: isNewAssignment ? Date.now().toString() : formData._id!,
+  //     title: formData.title!,
+  //     description: formData.description || "",
+  //     points: Number(formData.points) || 100,
+  //     type: formData.type as Assignment["type"],
+  //     displayGrade: formData.displayGrade || "Percentage",
+  //     assignTo: formData.assignTo || "Everyone",
+  //     due: formData.due || "",
+  //     available: formData.available || "",
+  //     course: cid!,
+  //   };
+
+  //   if (isNewAssignment) {
+  //     dispatch(addAssignment(assignmentData));
+  //   } else {
+  //     dispatch(updateAssignment(assignmentData));
+  //   }
+
+  //   navigate(`/Kambaz/Courses/${cid}/Assignments`);
+  // };
+  const handleSave = async () => {
     if (!formData.title?.trim()) {
       alert("Assignment name is required");
       return;
@@ -99,13 +126,20 @@ export default function AssignmentEditor() {
       course: cid!,
     };
 
-    if (isNewAssignment) {
-      dispatch(addAssignment(assignmentData));
-    } else {
-      dispatch(updateAssignment(assignmentData));
-    }
+    try {
+      if (isNewAssignment) {
+        const created = await assignmentClient.createAssignment(cid!, assignmentData);
+        dispatch(addAssignment(created));
+      } else {
+        const updated = await assignmentClient.updateAssignment(formData._id!, assignmentData);
+        dispatch(updateAssignment(updated));
+      }
 
-    navigate(`/Kambaz/Courses/${cid}/Assignments`);
+      navigate(`/Kambaz/Courses/${cid}/Assignments`);
+    } catch (err) {
+      console.error("Error saving assignment:", err);
+      alert("Failed to save assignment.");
+    }
   };
 
   const handleCancel = () => {

@@ -5,9 +5,11 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import { FaPlus, FaEdit, FaSearch, FaTrash } from "react-icons/fa";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteAssignment } from "./reducer";
+import { deleteAssignment, setAssignments } from "./reducer";
 import type { Assignment } from "./reducer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as assignmentClient from "./client";
+
 
 const typeOrder = [
   { key: "ASSIGNMENTS", label: "ASSIGNMENTS", weight: "40%" },
@@ -29,7 +31,7 @@ export default function Assignments() {
   // Group by type
   const groupedByType = courseAssignments.reduce(
     (acc: Record<string, Assignment[]>, assignment: Assignment) => {
-      const type = assignment.type || "ASSIGNMENTS"; // fallback if no type
+      const type = assignment.type || "ASSIGNMENTS";
       if (!acc[type]) acc[type] = [];
       acc[type].push(assignment);
       return acc;
@@ -61,12 +63,43 @@ export default function Assignments() {
     setShowConfirmModal(false);
   };
 
-  const confirmDelete = () => {
+  // const confirmDelete = () => {
+  //   if (selectedAssignmentId) {
+  //     dispatch(deleteAssignment(selectedAssignmentId));
+  //     closeDeleteConfirmation();
+  //   }
+  // };
+
+  const confirmDelete = async () => {
     if (selectedAssignmentId) {
-      dispatch(deleteAssignment(selectedAssignmentId));
-      closeDeleteConfirmation();
+      try {
+        const success = await assignmentClient.deleteAssignment(selectedAssignmentId);
+        if (success) {
+          dispatch(deleteAssignment(selectedAssignmentId));
+        } else {
+          alert("Failed to delete assignment");
+        }
+      } catch (error) {
+        console.error("Delete failed", error);
+        alert("An error occurred");
+      } finally {
+        closeDeleteConfirmation();
+      }
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const assignments = await assignmentClient.fetchAssignmentsForCourse(cid!);
+        dispatch(setAssignments(assignments));
+      } catch (error) {
+        console.error("Error loading assignments:", error);
+      }
+    };
+
+    if (cid) fetchData();
+  }, [cid, dispatch]);
 
   return (
     <div className="assignments-wrapper">
