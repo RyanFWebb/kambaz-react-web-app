@@ -4,7 +4,7 @@ import Dashboard from "./Dashboard";
 import KambazNavigation from "./Navigation";
 import Courses from "./Courses";
 import "./styles.css";
-import ProtectedRoute from "./Account/ProtectedRoute";
+// import ProtectedRoute from "./Account/ProtectedRoute";
 import Session from "./Account/Session";
 import * as courseClient from "./Courses/client";
 import * as userClient from "./Account/client";
@@ -83,9 +83,9 @@ export default function Kambaz() {
                             // </ProtectedRoute>
                         } />
                         <Route path="/Courses/:cid/*" element={
-                            <ProtectedRoute>
+                            // <ProtectedRoute>
                                 <Courses />
-                            </ProtectedRoute>
+                            // </ProtectedRoute>
                         } />
                         <Route path="/Calendar" element={<h1>Calendar</h1>} />
                         <Route path="/Inbox" element={<h1>Inbox</h1>} />

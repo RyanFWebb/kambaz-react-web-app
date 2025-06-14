@@ -2,15 +2,12 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Row, Col, Card, Button, FormControl } from "react-bootstrap";
 import { Link } from "react-router-dom";
-// import { v4 as uuidv4 } from "uuid";
 import * as accountClient from "../Account/client";
 import * as courseClient from "../Courses/client";
-// import { enrollUserInCourse, unenrollUserFromCourse } from "../Enrollments/reducer";
 import * as enrollmentClient from "../Enrollments/client";
 
 export default function Dashboard() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  // const dispatch = useDispatch();
 
   const [courses, setCourses] = useState<any[]>([]);
   const [course, setCourse] = useState<any>({
@@ -26,36 +23,27 @@ export default function Dashboard() {
   const [showAllCourses, setShowAllCourses] = useState<boolean>(false);
   const isFaculty = currentUser.role === "FACULTY";
 
-  // const fetchCourses = async () => {
-  //   try {
-  //     const data = showAllCourses
-  //       ? await courseClient.findAllCourses()
-  //       : await courseClient.findMyCourses(currentUser._id);
-
-  //     setCourses(data);
-  //   } catch (err) {
-  //     console.error("Failed to fetch courses:", err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchCourses();
-  // }, [showAllCourses, currentUser._id]);
-
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const data = showAllCourses
-          ? await courseClient.fetchAllCourses()
-          : await accountClient.findMyCourses();
-        setCourses(data);
-      } catch (err) {
-        console.error("Failed to fetch courses:", err);
-      }
-    };
+  const fetchCourses = async () => {
+    try {
+      const enrolledCourses = await accountClient.findMyCourses();
+      const enrolledIds = enrolledCourses.map((c: any) => c._id);
 
-    fetchCourses();
-  }, [showAllCourses, currentUser._id]);
+      const allCourses = await courseClient.fetchAllCourses();
+
+      const annotatedCourses = allCourses.map((course: any) => ({
+        ...course,
+        enrolled: enrolledIds.includes(course._id),
+      }));
+
+      setCourses(showAllCourses ? annotatedCourses : enrolledCourses);
+    } catch (err) {
+      console.error("Failed to fetch courses:", err);
+    }
+  };
+
+  fetchCourses();
+}, [showAllCourses, currentUser._id]);
 
   // const addNewCourse = () => {
   //   const newCourse = { ...course, _id: uuidv4() };
@@ -70,11 +58,6 @@ export default function Dashboard() {
     }
   };
 
-  // const updateCourse = () => {
-  //   setCourses(
-  //     courses.map((c) => (c._id === course._id ? course : c))
-  //   );
-  // };
   const updateCourse = async () => {
     try {
       await courseClient.updateCourse(course);
@@ -100,11 +83,17 @@ export default function Dashboard() {
         await enrollmentClient.enrollUserInCourse(currentUser._id, courseId);
       }
 
-      const updatedCourses = showAllCourses
-        ? await courseClient.fetchAllCourses()
-        : await accountClient.findMyCourses();
+      const updatedEnrolled = await accountClient.findMyCourses();
+      const enrolledIds = updatedEnrolled.map((c: any) => c._id);
 
-      setCourses(updatedCourses);
+      const allCourses = await courseClient.fetchAllCourses();
+      const annotatedCourses = allCourses.map((c: any) => ({
+        ...c,
+        enrolled: enrolledIds.includes(c._id),
+      }));
+
+      setCourses(showAllCourses ? annotatedCourses : updatedEnrolled);
+
     } catch (err) {
       console.error("Enrollment action failed:", err);
     }
@@ -206,20 +195,10 @@ export default function Dashboard() {
 
                       {/* Enroll/Unenroll for students */}
                       {!isFaculty && (
-                        // <Button
-                        //   className={`float-end mb-3 ${
-                        //     isEnrolled ? "btn-danger" : "btn-success"
-                        //   }`}
-                        //   onClick={(event) => {
-                        //     event.preventDefault();
-                        //     handleEnrollment(course._id, isEnrolled);
-                        //   }}
-                        // >
-                        //   {isEnrolled ? "Unenroll" : "Enroll"}
-                        // </Button>
                         <Button
-                          variant={isEnrolled ? "danger" : "success"}
-                          className="float-end mb-3"
+                          className={`float-end mb-3 ${
+                            isEnrolled ? "btn-danger" : "btn-success"
+                          }`}
                           onClick={(event) => {
                             event.preventDefault();
                             handleEnrollment(course._id, isEnrolled);
