@@ -14,6 +14,8 @@
     "axios": "^1.9.0",
     "bootstrap": "^5.3.6",
     "cors": "^2.8.5",
+    "mongodb": "^6.17.0",
+    "mongoose": "^8.15.2",
     "primeicons": "^7.0.0",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",
