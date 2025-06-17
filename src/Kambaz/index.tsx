@@ -17,13 +17,59 @@ export default function Kambaz() {
     const [courses, setCourses] = useState<any[]>([]);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
+    const [enrolling, setEnrolling] = useState<boolean>(false);
+
+    const updateEnrollment = async (courseId: string, enrolled: boolean) => {
+        if (enrolled) {
+            await userClient.enrollIntoCourse(currentUser._id, courseId);
+        } else {
+            await userClient.unenrollFromCourse(currentUser._id, courseId);
+        }
+        setCourses(
+            courses.map((course) => {
+                if (course._id === courseId) {
+                    return { ...course, enrolled: enrolled };
+                } else {
+                    return course;
+                }
+            })
+        );
+    };
+
+    const findCoursesForUser = async () => {
+        try {
+            const courses = await userClient.findCoursesForUser(currentUser._id);
+            setCourses(courses);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    const fetchCourses = async () => {
+        try {
+            const allCourses = await courseClient.fetchAllCourses();
+            const enrolledCourses = await userClient.findCoursesForUser(
+                currentUser._id
+            );
+            const courses = allCourses.map((course: any) => {
+                if (enrolledCourses.find((c: any) => c._id === course._id)) {
+                    return { ...course, enrolled: true };
+                } else {
+                    return course;
+                }
+            });
+            setCourses(courses);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const today = new Date().toISOString().split("T")[0];
     const nextWeek = new Date();
     nextWeek.setDate(nextWeek.getDate() + 7);
     const weekFromToday = nextWeek.toISOString().split("T")[0];
 
-    const course = {
-        id: "RS500",
+    const [course] = useState<any>({
+        _id: "RS500",
         name: "New Course",
         number: "RS2555",
         startDate: today,
@@ -31,20 +77,28 @@ export default function Kambaz() {
         department: "Trials and Tribulations",
         credits: 4,
         description: "New Course",
-    }
+    });
 
-    const fetchCourses = async () => { // I believe this is meant to be findAllCourses
-        try {
-            const courses = await userClient.findMyCourses();
-            setCourses(courses);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    // const fetchCourses = async () => { 
+    //     try {
+    //         const courses = await courseClient.fetchAllCourses();
+    //         setCourses(courses);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     fetchCourses();
+    // }, [currentUser]);
 
     useEffect(() => {
-        fetchCourses();
-    }, [currentUser]);
+        if (enrolling) {
+            fetchCourses();
+        } else {
+            findCoursesForUser();
+        }
+    }, [currentUser, enrolling]);
     
     const updateCourse = async () => {
         await courseClient.updateCourse(course);
@@ -56,13 +110,19 @@ export default function Kambaz() {
 
 
     const addNewCourse = async () => {
-        const newCourse = await userClient.createCourse(course);
+        // const newCourse = await userClient.createCourse(course);
+        const newCourse = await courseClient.createCourse(course);
         setCourses([ ...courses, newCourse ]);
     };
 
+    // const deleteCourse = async (courseId: string) => {
+    //     const status = await courseClient.deleteCourse(courseId);
+    //     console.log(status);
+    //     setCourses(courses.filter((course) => course._id !== courseId));
+    // };
     const deleteCourse = async (courseId: string) => {
         const status = await courseClient.deleteCourse(courseId);
-        console.log(status);
+        console.log(status)
         setCourses(courses.filter((course) => course._id !== courseId));
     };
 
@@ -79,7 +139,8 @@ export default function Kambaz() {
                         <Route path="/Account/*" element={<Account />} />
                         <Route path="/Dashboard" element={
                             // <ProtectedRoute> The protected route here was hiding courses from non-faculty
-                                <Dashboard />
+                                <Dashboard enrolling={enrolling} setEnrolling={setEnrolling}
+                                    updateEnrollment={updateEnrollment}/>
                             // </ProtectedRoute>
                         } />
                         <Route path="/Courses/:cid/*" element={
