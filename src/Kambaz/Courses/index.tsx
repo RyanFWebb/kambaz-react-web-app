@@ -8,6 +8,7 @@ import Grades from "./Grades";
 import Piazza from "./Piazza";
 import Zoom from "./Zoom";
 import Quizzes from "./Quizzes";
+// import QuizzesEditor from "./Quizzes/Editor";
 import { Routes, Route, Navigate, useParams, useLocation } from "react-router-dom";
 import { FaAlignJustify } from 'react-icons/fa';
 import { useSelector } from "react-redux";
@@ -40,6 +41,7 @@ export default function Courses() {
                         <Route path="Piazza" element={<Piazza />} />
                         <Route path="Zoom" element={<Zoom />} />
                         <Route path="Quizzes" element={<Quizzes />} />
+                        {/* <Route path="Quizzes/:qid" element={<QuizzesEditor />} /> */}
                     </Routes>
                 </div>
             </div>
