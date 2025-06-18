@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import assignments from "../../Database/assignments.json";
+// import assignments from "../../Database/assignments.json";
 
 export interface Assignment {
   _id: string;
@@ -20,8 +20,12 @@ interface AssignmentsState {
 }
 
 const initialState: AssignmentsState = {
-  assignments: assignments as Assignment[],
+  assignments: [],
 };
+
+// const initialState: AssignmentsState = {
+//   assignments: assignments as Assignment[],
+// };
 
 const assignmentsSlice = createSlice({
   name: "assignments",
