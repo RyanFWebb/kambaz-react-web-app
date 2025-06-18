@@ -1,14 +1,49 @@
 import { Link, useLocation, useParams } from "react-router-dom";
 import { ListGroup } from "react-bootstrap";
-import * as db from "../Database";
+// import * as db from "../Database";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchAllCourses } from "./client";
+import { setCourses } from "./courseReducer";
 
 export default function CourseNavigation() {
     const { cid } = useParams();
     const { pathname } = useLocation();
-    const course = db.courses.find((course) => course._id === cid);
+    const dispatch = useDispatch();
+    const courses = useSelector((state: any) => state.coursesReducer.courses);
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const course = courses.find((course: any) => course._id === cid);
+    // const course = db.courses.find((course) => course._id === cid);
     if (!course) {
         return null;
     }
+
+    useEffect(() => {
+        const loadCourses = async () => {
+            if (!course) {
+                setLoading(true);
+                try {
+                    const remoteCourses = await fetchAllCourses();
+                    dispatch(setCourses(remoteCourses));
+                } catch (err) {
+                    console.error("Failed to fetch courses", err);
+                    setError("Could not load course.");
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+        loadCourses();
+    }, [cid, course, dispatch]);
+
+    if (loading) return <div>Loading course...</div>;
+    if (error) return <div>{error}</div>;
+    if (!course) return null;
+
     const links = [
         { label: "Home", path: `/Kambaz/Courses/${course._id}/Home` },
         { label: "Modules", path: `/Kambaz/Courses/${course._id}/Modules` },
