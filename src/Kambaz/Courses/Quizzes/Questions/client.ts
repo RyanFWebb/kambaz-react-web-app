@@ -16,8 +16,13 @@ export const fetchQuestionById = async (questid: string) => {
   return response.data;
 };
 
-export const createQuestion = async (questid: string, question: any) => {
-  const response = await axiosWithCredentials.post(`${QUIZZES_API}/${questid}/questions`, question);
+// export const createQuestion = async (questid: string, question: any) => {
+//   const response = await axiosWithCredentials.post(`${QUIZZES_API}/${questid}/questions`, question);
+//   return response.data;
+// };
+
+export const createQuestion = async (cid: string, qid: string, question: any) => {
+  const response = await axiosWithCredentials.post(`/api/courses/${cid}/quizzes/${qid}/questions`, question);
   return response.data;
 };
 

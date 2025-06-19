@@ -80,7 +80,7 @@ export default function QuestionEditor() {
 
         try {
         if (isNewQuestion) {
-            const created = await questionClient.createQuestion(cid!, questionData);
+            const created = await questionClient.createQuestion(cid!, qid!, questionData);
             dispatch(addQuestion(created));
         } else {
             const updated = await questionClient.updateQuestion(formData._id!, questionData);
