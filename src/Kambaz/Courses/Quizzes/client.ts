@@ -7,6 +7,7 @@ const QUIZZES_API = `${REMOTE_SERVER}/api/quizzes`;
 
 export const fetchQuizzesForCourse = async (cid: string) => {
   const response = await axiosWithCredentials.get(`${COURSES_API}/${cid}/quizzes`);
+  console.log('API response data:', response.data);
   return response.data;
 };
 

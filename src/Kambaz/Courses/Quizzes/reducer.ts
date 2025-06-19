@@ -1,17 +1,41 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface Quiz {
+// export interface Quiz {
+//   _id: string;
+//   title: string;
+//   course: string;
+//   description: string;
+//   points: number;
+//   due: string;
+//   available: string;
+//   assignTo: string;
+//   displayGrade: string;
+// }
+
+export type Quiz = {
   _id: string;
   title: string;
-  course: string;
   description: string;
   points: number;
+  displayGrade: string;
+  assignTo: string;
   due: string;
   available: string;
-  assignTo: string;
-  displayGrade: string;
-}
+  until?: string;
+  course: string;
+  quizType?: string;
+  assignmentGroup?: string;
+  shuffleAnswers?: boolean;
+  timeLimit?: number;
+  multipleAttempts?: boolean;
+  showCorrectAnswers?: string;
+  accessCode?: string;
+  oneQuestionAtATime?: boolean;
+  webcamRequired?: boolean;
+  lockQuestionsAfterAnswering?: boolean;
+  published?: boolean;
+};
 
 interface QuizzesState {
   quizzes: Quiz[];

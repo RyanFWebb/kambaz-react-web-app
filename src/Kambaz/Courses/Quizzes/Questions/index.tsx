@@ -3,60 +3,57 @@ import {
     Button,
     Row,
     Col,
-    Form,
-    InputGroup,
     Modal,
     Dropdown,
 } from "react-bootstrap";
 import { BsCheckCircle, BsGripVertical, BsXCircle } from "react-icons/bs";
-import GreenCheckmark from "../Assignments/GreenCheckmark";
+import GreenCheckmark from "../../Assignments/GreenCheckmark";
 import { IoEllipsisVertical } from "react-icons/io5";
-import { FaPlus, FaSearch, FaEdit, FaTrash } from "react-icons/fa";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteQuiz, setQuizzes, type Quiz } from "./reducer.ts";
+import { deleteQuestion, setQuestions, type Question } from "./reducer.ts";
 import { useEffect, useState } from "react";
-import * as quizClient from "./client";
+import * as questionClient from "./client.ts";
 import { RxRocket } from "react-icons/rx";
 
-export default function Quizzes() {
-    const { cid } = useParams();
+export default function Questions() {
+    const { cid, qid } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const allQuizzes = useSelector((state: any) => state.quizzesReducer?.quizzes ?? []);
-    const quizzes = allQuizzes
-        .filter((quiz: Quiz) => quiz.course === cid)
-        .sort((a: Quiz, b: Quiz) => new Date(a.available).getTime() - new Date(b.available).getTime());
+    const allQuestions = useSelector((state: any) => state.questionsReducer?.questions ?? []);
+    const questions = allQuestions
+        .filter((question: Question) => question.quiz === qid)
 
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const isFaculty = currentUser?.role === "FACULTY";
 
-    const handleAddQuiz = () => {
-        navigate(`/Kambaz/Courses/${cid}/Quizzes/new`);
+    const handleAddQuestion = () => {
+        navigate(`/Kambaz/Courses/${cid}/Quizzes/${qid}/Questions/new`);
     };
 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
+    const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(null);
 
-    const openDeleteConfirmation = (quizId: string) => {
-        setSelectedQuizId(quizId);
+    const openDeleteConfirmation = (questionId: string) => {
+        setSelectedQuestionId(questionId);
         setShowConfirmModal(true);
     };
 
     const closeDeleteConfirmation = () => {
-        setSelectedQuizId(null);
+        setSelectedQuestionId(null);
         setShowConfirmModal(false);
     };
 
-    const togglePublish = async (quiz: Quiz) => {
+    const togglePublish = async (question: Question) => {
         try {
-            const updated = await quizClient.updateQuiz(quiz._id, {
-            ...quiz,
-            published: !quiz.published,
+            const updated = await questionClient.updateQuestion(question._id, {
+            ...question,
+            published: !question.published,
             });
-            dispatch(setQuizzes(
-                quizzes.map((q: Quiz) => (q._id === quiz._id ? updated : q))
+            dispatch(setQuestions(
+                questions.map((q: Question) => (q._id === question._id ? updated : q))
             ));
         } catch (err) {
             console.error("Failed to toggle publish status", err);
@@ -65,13 +62,13 @@ export default function Quizzes() {
     };
 
     const confirmDelete = async () => {
-        if (selectedQuizId) {
+        if (selectedQuestionId) {
             try {
-                const success = await quizClient.deleteQuiz(selectedQuizId);
+                const success = await questionClient.deleteQuestion(selectedQuestionId);
                 if (success) {
-                    dispatch(deleteQuiz(selectedQuizId));
+                    dispatch(deleteQuestion(selectedQuestionId));
                 } else {
-                    alert("Failed to delete quiz");
+                    alert("Failed to delete question");
                 }
             } catch (error) {
                 console.error("Delete failed", error);
@@ -85,27 +82,27 @@ export default function Quizzes() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const quizzes = await quizClient.fetchQuizzesForCourse(cid!);
-                dispatch(setQuizzes(quizzes));
+                const questions = await questionClient.fetchQuestionsForQuiz(qid!);
+                dispatch(setQuestions(questions));
             } catch (error) {
-                console.error("Error loading quizzes:", error);
+                console.error("Error loading questions:", error);
             }
         };
         if (cid) fetchData();
     }, [cid, dispatch]);
 
-    const [searchTerm, setSearchTerm] = useState("");
-    const filteredQuizzes = quizzes.filter((quiz: Quiz) =>
-        quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
+    const [searchTerm] = useState("");
+    const filteredQuestions = questions.filter((question: Question) =>
+        question.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
-        <div className="quizzes-wrapper">
-            <div className="quizzes-content">
-                <div className="quizzes-header mb-3">
+        <div className="questions-wrapper">
+            <div className="questions-content">
+                <div className="questions-header mb-3">
                     <Row className="align-items-center">
                         <Col>
-                            <InputGroup className="mb-3">
+                            {/* <InputGroup className="mb-3">
                                 <InputGroup.Text>
                                     <FaSearch />
                                 </InputGroup.Text>
@@ -115,13 +112,13 @@ export default function Quizzes() {
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
-                            </InputGroup>
+                            </InputGroup> */}
                         </Col>
                         <Col className="d-flex justify-content-end">
                             {isFaculty && (
-                                <div id="wd-quiz-handling-buttons">
-                                    <Button variant="danger" onClick={handleAddQuiz}>
-                                        <FaPlus className="me-2" /> Quiz
+                                <div id="wd-question-handling-buttons">
+                                    <Button variant="secondary" onClick={handleAddQuestion}>
+                                        <FaPlus className="justify-content-between align-items-center" /> New Question
                                     </Button>
                                 </div>
                             )}
@@ -133,66 +130,66 @@ export default function Quizzes() {
             <ListGroup className="rounded-0 modules-list">
                 <ListGroup.Item className="module-item p-0 fs-5 border-gray">
                     <div className="module-title p-3 ps-2 bg-secondary text-black">
-                        <BsGripVertical className="me-2 fs-3" /> Quizzes
+                        <BsGripVertical className="me-2 fs-3" /> Questions
                     </div>
                 </ListGroup.Item>
 
-                {filteredQuizzes.length === 0 ? (
+                {filteredQuestions.length === 0 ? (
                     <ListGroup.Item className="p-3 text-muted fst-italic">
-                        No quizzes available. Click the "+ Quiz" button to add one.
+                        No quizzes available. Click the "+ Question" button to add one.
                     </ListGroup.Item>
                 ) : (
-                    filteredQuizzes.map((quiz: Quiz) => (
-                        <ListGroup.Item key={quiz._id} className="quiz-item p-3">
+                    filteredQuestions.map((question: Question) => (
+                        <ListGroup.Item key={question._id} className="question-item p-3">
                             <div className="d-flex justify-content-between align-items-center w-100">
                                 <div className="d-flex align-items-center">
                                     <RxRocket className="me-2 fs-3 text-success" />
                                     <div>
-                                        <div className="quiz-header text-black fs-4 mb-1">
-                                            {isFaculty ? (
+                                        <div className="question-header text-black fs-4 mb-1">
+                                            {/* {isFaculty ? (
                                                 <Link
-                                                    to={`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/Details`}
+                                                    to={`/Kambaz/Courses/${cid}/Questions/${quiz._id}/Details`}
                                                     className="text-danger text-decoration-none"
                                                 >
-                                                    {quiz.title}
+                                                    {question.title}
                                                 </Link>
                                             ) : (
                                                 <span className="text-danger">{quiz.title}</span>
-                                            )}
+                                            )} */}
                                         </div>
                                         <div className="fs-6 text-muted">
                                             {/* <span className="red-font">Multiple Modules</span>
                                             <span className="mx-2">|</span> */}
-                                            <span>
+                                            {/* <span>
                                                 <b>Available</b>{" "}
-                                                {new Date(quiz.available).toLocaleString("en-US", {
+                                                {new Date(question.available).toLocaleString("en-US", {
                                                     month: "short",
                                                     day: "numeric",
                                                     hour: "numeric",
                                                     minute: "numeric",
                                                     hour12: true,
                                                 })}
-                                            </span>
+                                            </span> */}
                                             <span className="mx-2">|</span>
-                                            <span>
+                                            {/* <span>
                                                 <b>Due</b>{" "}
-                                                {new Date(quiz.due).toLocaleString("en-US", {
+                                                {new Date(question.due).toLocaleString("en-US", {
                                                     month: "short",
                                                     day: "numeric",
                                                     hour: "numeric",
                                                     minute: "numeric",
                                                     hour12: true,
                                                 })}
-                                            </span>
+                                            </span> */}
                                             <span className="mx-2">|</span>
-                                            <span>{quiz.points} pts</span>
+                                            <span>{question.points} pts</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 {isFaculty && (
                                     <div className="d-flex align-items-center">
-                                        {quiz.published ? (
+                                        {question.published ? (
                                             <GreenCheckmark />
                                         ) : null}
                                         <Dropdown align="end">
@@ -201,19 +198,19 @@ export default function Quizzes() {
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 <Dropdown.Item
-                                                    onClick={() => navigate(`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}`)}
+                                                    onClick={() => navigate(`/Kambaz/Courses/${cid}/Quizzes/${qid}/Questions/${question._id}`)}
                                                 >
                                                     <FaEdit className="me-2" />
                                                     Edit
                                                 </Dropdown.Item>
                                                 <Dropdown.Item
-                                                    onClick={() => openDeleteConfirmation(quiz._id)}
+                                                    onClick={() => openDeleteConfirmation(question._id)}
                                                 >
                                                     <FaTrash className="me-2 text-danger" />
                                                     Delete
                                                 </Dropdown.Item>
-                                                <Dropdown.Item onClick={() => togglePublish(quiz)}>
-                                                    {quiz.published ? (
+                                                <Dropdown.Item onClick={() => togglePublish(question)}>
+                                                    {question.published ? (
                                                         <span>
                                                             <BsXCircle className="text-danger me-2" title="Unpublish" />Unpublish</span>
                                                     ) : (
@@ -235,7 +232,7 @@ export default function Quizzes() {
                 <Modal.Header closeButton>
                     <Modal.Title>Confirm Deletion</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you sure you want to delete this quiz?</Modal.Body>
+                <Modal.Body>Are you sure you want to delete this question?</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={closeDeleteConfirmation}>
                         Cancel

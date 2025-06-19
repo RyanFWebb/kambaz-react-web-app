@@ -46,10 +46,6 @@ export default function Assignments() {
     navigate(`/Kambaz/Courses/${cid}/Assignments/new`);
   };
 
-  // const handleDeleteAssignment = (assignmentId: string) => {
-  //   dispatch(deleteAssignment(assignmentId));
-  // };
-
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedAssignmentId, setSelectedAssignmentId] = useState<string | null>(null);
 
@@ -62,13 +58,6 @@ export default function Assignments() {
     setSelectedAssignmentId(null);
     setShowConfirmModal(false);
   };
-
-  // const confirmDelete = () => {
-  //   if (selectedAssignmentId) {
-  //     dispatch(deleteAssignment(selectedAssignmentId));
-  //     closeDeleteConfirmation();
-  //   }
-  // };
 
   const confirmDelete = async () => {
     if (selectedAssignmentId) {
