@@ -11,6 +11,7 @@ export default function Details() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const editor = `/Kambaz/Courses/${cid}/Quizzes/${qid}`
+    const preview = `/Kambaz/Courses/${cid}/Quizzes/${qid}/Preview`;
     useEffect(() => {
         const loadQuiz = async () => {
         try {
@@ -36,7 +37,7 @@ export default function Details() {
                 <Button
                     className="me-2"
                     variant="secondary"
-                    // onClick={() => navigate(editor)}
+                    onClick={() => navigate(preview)}
                 >
                     Preview
                 </Button>
@@ -73,3 +74,4 @@ export default function Details() {
         </div>
   );
 }
+

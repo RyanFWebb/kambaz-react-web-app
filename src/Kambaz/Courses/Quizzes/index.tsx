@@ -105,7 +105,7 @@ export default function Quizzes() {
                 <div className="quizzes-header mb-3">
                     <Row className="align-items-center">
                         <Col>
-                            <InputGroup className="mb-3">
+                            <InputGroup>
                                 <InputGroup.Text>
                                     <FaSearch />
                                 </InputGroup.Text>
@@ -121,7 +121,10 @@ export default function Quizzes() {
                             {isFaculty && (
                                 <div id="wd-quiz-handling-buttons">
                                     <Button variant="danger" onClick={handleAddQuiz}>
-                                        <FaPlus className="me-2" /> Quiz
+                                        <FaPlus /> Quiz
+                                    </Button>
+                                    <Button variant="secondary" className="ms-2">
+                                        <IoEllipsisVertical />
                                     </Button>
                                 </div>
                             )}
@@ -143,7 +146,7 @@ export default function Quizzes() {
                     </ListGroup.Item>
                 ) : (
                     filteredQuizzes.map((quiz: Quiz) => (
-                        <ListGroup.Item key={quiz._id} className="quiz-item p-3">
+                        <ListGroup.Item key={quiz._id} className="quiz-item p-3" style={{ borderLeft: '4px solidrgb(0, 128, 0)' }}>
                             <div className="d-flex justify-content-between align-items-center w-100">
                                 <div className="d-flex align-items-center">
                                     <RxRocket className="me-2 fs-3 text-success" />

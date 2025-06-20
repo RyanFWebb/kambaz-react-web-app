@@ -15,6 +15,7 @@ import { Routes, Route, Navigate, useParams, useLocation } from "react-router-do
 import { FaAlignJustify } from 'react-icons/fa';
 import { useSelector } from "react-redux";
 import QuestionEditor from "./Quizzes/Questions/Editor";
+import Preview from "./Quizzes/Preview";
 
 export default function Courses() {
     const { cid } = useParams();
@@ -46,6 +47,7 @@ export default function Courses() {
                         <Route path="Quizzes" element={<Quizzes />} />
                         <Route path="Quizzes/:qid" element={<QuizzesEditor />} />
                         <Route path="Quizzes/:qid/Details" element={<Details />} />
+                        <Route path="Quizzes/:qid/Preview" element={<Preview />} />
                         <Route path="Quizzes/:qid/Questions" element={<Questions />} />
                         <Route path="Quizzes/:qid/Questions/:questid" element={<QuestionEditor />} />
                     </Routes>

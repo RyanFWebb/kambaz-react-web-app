@@ -10,7 +10,7 @@ import { BsCheckCircle, BsGripVertical, BsXCircle } from "react-icons/bs";
 import GreenCheckmark from "../../Assignments/GreenCheckmark";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteQuestion, setQuestions, type Question } from "./reducer.ts";
 import { useEffect, useState } from "react";
@@ -48,7 +48,7 @@ export default function Questions() {
 
     const togglePublish = async (question: Question) => {
         try {
-            const updated = await questionClient.updateQuestion(question._id, {
+            const updated = await questionClient.updateQuestion(qid!, question._id, {
             ...question,
             published: !question.published,
             });
@@ -64,7 +64,7 @@ export default function Questions() {
     const confirmDelete = async () => {
         if (selectedQuestionId) {
             try {
-                const success = await questionClient.deleteQuestion(selectedQuestionId);
+                const success = await questionClient.deleteQuestion(qid!, selectedQuestionId);
                 if (success) {
                     dispatch(deleteQuestion(selectedQuestionId));
                 } else {
@@ -82,14 +82,14 @@ export default function Questions() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const questions = await questionClient.fetchQuestionsForQuiz(qid!);
+                const questions = await questionClient.fetchQuestionsForQuiz(cid!, qid!);
                 dispatch(setQuestions(questions));
             } catch (error) {
                 console.error("Error loading questions:", error);
             }
         };
         if (cid) fetchData();
-    }, [cid, dispatch]);
+    }, [cid, qid, dispatch]);
 
     const [searchTerm] = useState("");
     const filteredQuestions = questions.filter((question: Question) =>
@@ -136,7 +136,7 @@ export default function Questions() {
 
                 {filteredQuestions.length === 0 ? (
                     <ListGroup.Item className="p-3 text-muted fst-italic">
-                        No quizzes available. Click the "+ Question" button to add one.
+                        No questions available. Click the "+ New Question" button to add one.
                     </ListGroup.Item>
                 ) : (
                     filteredQuestions.map((question: Question) => (
@@ -146,16 +146,16 @@ export default function Questions() {
                                     <RxRocket className="me-2 fs-3 text-success" />
                                     <div>
                                         <div className="question-header text-black fs-4 mb-1">
-                                            {/* {isFaculty ? (
+                                            {isFaculty ? (
                                                 <Link
-                                                    to={`/Kambaz/Courses/${cid}/Questions/${quiz._id}/Details`}
+                                                    to={`/Kambaz/Courses/${cid}/Quizzes/${qid}/Questions/${question._id}`}
                                                     className="text-danger text-decoration-none"
                                                 >
                                                     {question.title}
                                                 </Link>
                                             ) : (
-                                                <span className="text-danger">{quiz.title}</span>
-                                            )} */}
+                                                <span className="text-danger">{question.title}</span>
+                                            )}
                                         </div>
                                         <div className="fs-6 text-muted">
                                             {/* <span className="red-font">Multiple Modules</span>
