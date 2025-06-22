@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import { FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
 import * as questionClient from './Questions/client';
 import * as quizClient from './client';
+import { IoCheckmark } from 'react-icons/io5';
 
 interface PreviewAnswer {
     questionId: string;
@@ -412,12 +413,13 @@ export default function QuizPreview() {
                                             action
                                             active={index === currentQuestionIndex}
                                             onClick={() => setCurrentQuestionIndex(index)}
-                                            className="d-flex justify-content-between align-items-center py-2"
-                                        >
-                                            <span>Question {index + 1}</span>
+                                            className={`d-flex justify-content-between align-items-center py-2 ${
+                                                index === currentQuestionIndex ? 'bg-secondary text-danger' : 'text-danger'
+                                            }`} >
+                                            <span className='text-danger'>Question {index + 1}</span>
                                             <div>
                                                 {answers[question._id] && (
-                                                    <Badge bg="success">✓</Badge>
+                                                    <Badge bg="success"><IoCheckmark /></Badge>
                                                 )}
                                                 <small className="text-muted ms-2">{question.points}pts</small>
                                             </div>
