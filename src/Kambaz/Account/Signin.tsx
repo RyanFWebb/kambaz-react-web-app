@@ -28,6 +28,12 @@ export default function Signin() {
                 "w-100" > Signin </Button>
             <Link id="wd-signup-link" to=
                 "/Kambaz/Account/Signup"> Signup </Link>
+            <br /><br/>
+            <p>Ryan Webb</p>
+            <p>CS5610 Summer 1 2025 with Dr. Jose Annunziato</p>
+            <Link id="wd-frontend-github-link" to="https://github.com/RyanFWebb/kambaz-react-web-app"> GitHub repository to the <strong>front end project</strong> </Link>
+            <br />
+            <Link id="wd-forgot-password-link" to="https://github.com/RyanFWebb/kambaz-node-server-app"> GitHub repository to the <strong>server project</strong> </Link>
         </div>
     );
 }
