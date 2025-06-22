@@ -158,29 +158,13 @@ export default function Questions() {
                                             )}
                                         </div>
                                         <div className="fs-6 text-muted">
-                                            {/* <span className="red-font">Multiple Modules</span>
-                                            <span className="mx-2">|</span> */}
-                                            {/* <span>
-                                                <b>Available</b>{" "}
-                                                {new Date(question.available).toLocaleString("en-US", {
-                                                    month: "short",
-                                                    day: "numeric",
-                                                    hour: "numeric",
-                                                    minute: "numeric",
-                                                    hour12: true,
-                                                })}
-                                            </span> */}
+                                            <span>
+                                                <b>Type:</b> {question.questionType}
+                                            </span>
                                             <span className="mx-2">|</span>
-                                            {/* <span>
-                                                <b>Due</b>{" "}
-                                                {new Date(question.due).toLocaleString("en-US", {
-                                                    month: "short",
-                                                    day: "numeric",
-                                                    hour: "numeric",
-                                                    minute: "numeric",
-                                                    hour12: true,
-                                                })}
-                                            </span> */}
+                                            <span>
+                                                <b>Question:</b> {question.question ? question.question : "No question text provided"}
+                                            </span>
                                             <span className="mx-2">|</span>
                                             <span>{question.points} pts</span>
                                         </div>

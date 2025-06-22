@@ -436,9 +436,9 @@ export default function QuizPreview() {
                                 </p>
                                 <div className="progress">
                                     <div
-                                        className="progress-bar"
+                                        className="progress-bar bg-danger"
                                         style={{
-                                            width: `${(Object.values(answers).filter(a => a.trim() !== '').length / questions.length) * 100}%`
+                                            width: `${(Object.values(answers).filter(a => a.trim() !== '').length / questions.length) * 100}%`,
                                         }}
                                     />
                                 </div>
