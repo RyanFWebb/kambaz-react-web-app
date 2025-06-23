@@ -1,6 +1,5 @@
 import { Link, useLocation, useParams } from "react-router-dom";
 import { ListGroup } from "react-bootstrap";
-// import * as db from "../Database";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,14 +16,10 @@ export default function CourseNavigation() {
     const [error, setError] = useState("");
 
     const course = courses.find((course: any) => course._id === cid);
-    // const course = db.courses.find((course) => course._id === cid);
-    if (!course) {
-        return null;
-    }
 
     useEffect(() => {
         const loadCourses = async () => {
-            if (!course) {
+            if (courses.length === 0 || !courses.find((c: any) => c._id === cid)) {
                 setLoading(true);
                 try {
                     const remoteCourses = await fetchAllCourses();
@@ -38,11 +33,10 @@ export default function CourseNavigation() {
             }
         };
         loadCourses();
-    }, [cid, course, dispatch]);
-
+    }, [cid, courses.length, dispatch]); 
     if (loading) return <div>Loading course...</div>;
     if (error) return <div>{error}</div>;
-    if (!course) return null;
+    if (!course) return <div>Course not found.</div>; 
 
     const links = [
         { label: "Home", path: `/Kambaz/Courses/${course._id}/Home` },
@@ -54,6 +48,7 @@ export default function CourseNavigation() {
         { label: "Grades", path: `/Kambaz/Courses/${course._id}/Grades` },
         { label: "People", path: `/Kambaz/Courses/${course._id}/People` }
     ];
+
     return (
         <div id="wd-courses-navigation" className="list-group fs-5 rounded-0">
             <ListGroup id="wd-courses-navigation" style={{width: 120}}
